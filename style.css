@@ -1,0 +1,50 @@
+#control_map{
+	width: 900px;
+	height: 600px;
+	cursor: default;
+}
+ul{
+	list-style: none;
+	margin-top: 5px;
+}
+.border-red{
+	border: 2px solid red;
+}
+#logs_tab{
+    margin-top: 20px;
+}
+#logs_tab .logs_tab_inner{
+    background-color: #f1f1f1;
+    border: 1px solid #b1b1b1;
+	width: 100%;
+	max-width: 800px;
+	height: 300px;
+    position: relative;
+	overflow: auto;
+}
+#logs_tab .logs_data{
+	margin: 0;
+	padding: 0;
+    position: relative;
+    bottom: 3px;
+}
+#logs_tab .logs_data > li{
+	margin-left: 3px;
+    font-size: 12px;
+    line-height: 16px;
+}
+.link_style{
+	color: #0275d8;
+    text-decoration: none;
+	cursor: pointer;
+}
+.link_style:hover{
+	color: #014c8c;
+    text-decoration: underline;
+}
+.moving_arrows .arrow{
+	cursor: pointer;
+}
+.moving_arrows .arrow:hover{
+	color: lightgray;
+}
