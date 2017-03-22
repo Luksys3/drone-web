@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Drone</title>
+	<link rel="stylesheet" href="leaflet/leaflet.css" />
+	<link rel="stylesheet" href="bootstrap/4.0.0-alpha.6/css/bootstrap.min.css">
+	<link rel="stylesheet" href="style.css">
+</head>
+<body>
+	<div id="control_map" style="float:left;"></div>
+	<div style="padding: 20px 20px;overflow:hidden;">
+		<div>
+			<label for="altitude">Point altitude:</label>
+			<input type="text" id="altitude" name="altitude"/>
+		</div>
+		<hr/>
+		<div>
+			<label for="takeoff_altitude">TakeOff altitude:</label>
+			<input type="text" id="takeoff_altitude" name="takeoff_altitude"/>
+		<div>
+		<button id="add_mission_takeoff">Add mission</button><br/><br/>
+		
+		<hr/>
+		
+		<label for="rtl">RTL:</label>
+		<button id="add_mission_rtl">Add mission</button><br/><br/>
+		
+		<hr/>
+		<button id="force_land">Force land</button>
+		<button id="force_rtl">Force RTL</button><br/><br/>
+		<div>
+			<label for="airspeed">Air speed:</label>
+			<input type="text" id="airspeed" name="airspeed"/>
+			<button id="airspeed_button">Set</button>
+		</div>
+		
+		<hr/>
+		
+		
+		<button id="upload_button">Upload</button>
+		<button id="clear_missions">Clear missions</button>
+		
+		<hr/>
+		<button id="path_points_button">Path points</button>
+		<button id="logs_button">Log</button>
+		<div class="tabs">
+			<div id="path_points_tab">
+				<div id="point_moving_arrows_template" style="display:none;">
+					<span class="moving_arrows">
+						<span class="arrow" move="up">/\</span> 
+						<span class="arrow" move="down">\/</span>
+					</span>
+				</div>
+			</div>
+			<div id="logs_tab" style="display:none;">
+				<button id="add_log">Add log(for debugging)</button><br/>
+				<span id="clear_logs" class="link_style">Clear log</span>
+				<div class="logs_tab_inner">
+					<ul class="logs_data" data-field="logs"></ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script src="jquery/jquery.min.js"></script>
+	<script src="bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+	<script src="leaflet/leaflet.js"></script>
+	
+	<script src='https://unpkg.com/leaflet.gridlayer.googlemutant@latest/Leaflet.GoogleMutant.js'></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAjqVF4rbv21aS0adfVTfz86C2eveGdnmQ" async defer></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+	
+	<script src="js/main.js"></script>
+</body>
+</html>

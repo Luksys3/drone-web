@@ -3,7 +3,8 @@ var clearPathButton = $('#clear_path');
 var altitudeEl = $('#altitude');
 var rtlEl = $('#rtl');
 var uploadBtn = $('#upload_button');
-var addMissionBtn = $('#add_mission');
+var addMissionTakeoffBtn = $('#add_mission_takeoff');
+var addMissionRtlBtn = $('#add_mission_rtl');
 var takeOffAltEl = $('#takeoff_altitude');
 var forceLand = $('#force_land');
 var forceRtl = $('#force_rtl');
@@ -220,7 +221,8 @@ uploadBtn.on('click', function(){
 	upload();
 });
 
-addMissionBtn.on('click', function(){
+
+addMissionTakeoffBtn.on('click', function(){
 	var validation = true;
 	if( takeOffAltEl.val() == '' ){
 		addRedBorder(takeOffAltEl);
@@ -230,18 +232,6 @@ addMissionBtn.on('click', function(){
 	}
 	
 	if( validation === true ){
-		rtl = rtlEl.is(":checked");
-		if(rtl === true){
-			drawRltLine();
-			rtl = 1;
-		}else{
-			rtl = 0;
-			if(rtlLine !== false){
-				controlMap.removeLayer(rtlLine);
-			}
-		}
-		
-		
 		/*pathPoints.push(
 			{
 				'name':'takeoff',
@@ -252,8 +242,26 @@ addMissionBtn.on('click', function(){
 		);
 		updatePath();*/
 		takeOffAlt = takeOffAltEl.val();
-		alert('Mission added!');
+		// Add Takeoff
+		console.log('Mission Takeoff( '+ takeOffAlt +' ) added.');
 	}
+});
+
+addMissionRtlBtn.on('click', function(){
+	rtl = rtlEl.is(":checked");
+	/*if(rtl === true){
+		drawRltLine();
+		rtl = 1;
+	}else{
+		rtl = 0;
+		if(rtlLine !== false){
+			controlMap.removeLayer(rtlLine);
+		}
+	}*/
+	
+	takeOffAlt = takeOffAltEl.val();
+	// Add RTL
+	console.log('Mission RTL added.');
 });
 
 function addRedBorder(el){
