@@ -229,7 +229,6 @@ addMissionBtn.on('click', function(){
 		removeRedBorder(takeOffAltEl);
 	}
 	
-	console.log("RTL: ", rtl);
 	if( validation === true ){
 		rtl = rtlEl.is(":checked");
 		if(rtl === true){
@@ -290,8 +289,6 @@ function upload(){
 		}
 	);
 	
-	console.log(data);
-	
 	var mission = { 'Mission':data.slice() };
 	
 	if( takeOffAlt === '' ){
@@ -300,9 +297,6 @@ function upload(){
 		socket.emit('mission', mission);
 		
 		alert('Uploaded!');
-		console.log(rtl);
-		console.log(parseInt(takeOffAlt));
-		console.log(mission);
 	}
 }
 
@@ -366,9 +360,6 @@ function addLog(log){
 	var time = dt.getHours() +':'+ dt.getMinutes() +':'+ dt.getSeconds();
 	logsEl.append('<li>['+ time +']:  '+ log +'</li>');
 	
-	console.log( scrollBottom );
-	console.log( firstLog );
-	
 	bottomScrollPos = logsEl.height() - logsInner.height();
 	if( bottomScrollPos > 0){
 		if( scrollBottom || firstLog ){
@@ -376,7 +367,6 @@ function addLog(log){
 			firstLog = false;
 		}
 	}
-	console.log(bottomScrollPos +' == '+ logsInner.scrollTop());
 }
 
 
