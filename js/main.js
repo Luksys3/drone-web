@@ -13,8 +13,9 @@ var airSpeedBtn = $('#airspeed_button');
 var clearMissions = $('#clear_missions');
 
 var pathPointsBtn = $('#path_points_button');
-var logsBtn = $('#logs_button');
 var pathPointsContainter = $('#path_points_tab');
+
+var logsBtn = $('#logs_button');
 var logsContainer = $('#logs_tab');
 var logsInner = $('#logs_tab .logs_tab_inner');
 var logsEl = $('[data-field=logs]');
@@ -43,14 +44,18 @@ socket.on("response", function(log){
 var droneLat = 54.554699;
 var droneLng = 23.334518;
 
+
 controlMapEl.on('contextmenu', event => event.preventDefault());
+
+// Create map
 var controlMap = L.map('control_map').setView([droneLat, droneLng], 17);
 
-
+// Add map background
 var roads = L.gridLayer.googleMutant({
 	type: 'hybrid' // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
 }).addTo(controlMap);
 
+// Draw drone position on map
 var droneMarker = L.circle([droneLat, droneLng], {
 	color: 'red',
 	fillColor: 'red',
@@ -59,6 +64,7 @@ var droneMarker = L.circle([droneLat, droneLng], {
 }).addTo(controlMap);
 
 
+// On map click add new point
 controlMap.on('click', function(e){
 	var point = e.latlng;
 	point.alt = getAltitude();
