@@ -30,7 +30,16 @@ var socket = io.connect('http://localhost:8001');
 socket.on('connect',function() {
 	console.log('Client has connected to the server!');
 });
+socket.on('disconnected',function() {
+	console.log('Disconnected from server!');
+});
 
+// Get logs
+socket.on("response", function(log){
+	addLog( log["data"] );
+});
+
+// Drone coordinates
 var droneLat = 54.554699;
 var droneLng = 23.334518;
 
