@@ -3,7 +3,8 @@ var clearPathButton = $('#clear_path');
 var altitudeEl = $('#altitude');
 var rtlEl = $('#rtl');
 var uploadBtn = $('#upload_button');
-var addMissionBtn = $('#add_mission');
+var addMissionTakeoffBtn = $('#add_mission_takeoff');
+var addMissionRtlBtn = $('#add_mission_rtl');
 var takeOffAltEl = $('#takeoff_altitude');
 var forceLand = $('#force_land');
 var forceRtl = $('#force_rtl');
@@ -12,8 +13,9 @@ var airSpeedBtn = $('#airspeed_button');
 var clearMissions = $('#clear_missions');
 
 var pathPointsBtn = $('#path_points_button');
-var logsBtn = $('#logs_button');
 var pathPointsContainter = $('#path_points_tab');
+
+var logsBtn = $('#logs_button');
 var logsContainer = $('#logs_tab');
 var logsInner = $('#logs_tab .logs_tab_inner');
 var logsEl = $('[data-field=logs]');
@@ -29,18 +31,31 @@ socket.on('response',function(data) {
 	console.log('Client has connected to the server!');
 	addLog(data["data"])
 });
+socket.on('disconnected',function() {
+	console.log('Disconnected from server!');
+});
 
+// Get logs
+socket.on("response", function(log){
+	addLog( log["data"] );
+});
+
+// Drone coordinates
 var droneLat = 54.554699;
 var droneLng = 23.334518;
 
+
 controlMapEl.on('contextmenu', event => event.preventDefault());
+
+// Create map
 var controlMap = L.map('control_map').setView([droneLat, droneLng], 17);
 
-
+// Add map background
 var roads = L.gridLayer.googleMutant({
 	type: 'hybrid' // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
 }).addTo(controlMap);
 
+// Draw drone position on map
 var droneMarker = L.circle([droneLat, droneLng], {
 	color: 'red',
 	fillColor: 'red',
@@ -49,6 +64,7 @@ var droneMarker = L.circle([droneLat, droneLng], {
 }).addTo(controlMap);
 
 
+// On map click add new point
 controlMap.on('click', function(e){
 	var point = e.latlng;
 	point.alt = getAltitude();
@@ -67,13 +83,6 @@ pathPointsContainter.text('');
 pathPointsContainter.append('<ul>');
 pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLat +')</li>');
 	
-function addPointToPath(point){
-	pathPoints = path._latlngs;
-	pathPoints.push(point);
-	
-	updatePath();
-}
-
 function removePathPoint(point, pointCircle){
 	controlMap.removeLayer(pointCircle);
 	pathPoints = jQuery.grep(pathPoints, function(value) {
@@ -182,45 +191,12 @@ clearPathButton.on('click', function(){
 	updatePath();
 });
 
-function getAltitude(){
-	var val = altitudeEl.val();
-	if(val == ''){
-		return 0;
-	}else{
-		return parseInt(val);
-	}
-}
-
-/*rtlEl.on('change', function(){
-	if(rtlEl.is(":checked") === true){
-		drawRltLine();
-	}else{
-		if(rtlLine !== false){
-			controlMap.removeLayer(rtlLine);
-		}
-	}
-});*/
-
-function drawRltLine(){
-	if(rtlLine !== false){
-		controlMap.removeLayer(rtlLine);
-	}
-	
-	if(pathPoints !== false){
-		lastPoint = pathPoints[pathPoints.length-1];
-		var points = [[droneLat, droneLng], lastPoint];
-		rtlLine = L.polyline(points, {
-			color: 'orange',
-			opacity: 0.7
-		}).addTo(controlMap).bringToBack();
-	}
-}
-
 uploadBtn.on('click', function(){
 	upload();
 });
 
-addMissionBtn.on('click', function(){
+
+addMissionTakeoffBtn.on('click', function(){
 	var validation = true;
 	if( takeOffAltEl.val() == '' ){
 		addRedBorder(takeOffAltEl);
@@ -229,20 +205,7 @@ addMissionBtn.on('click', function(){
 		removeRedBorder(takeOffAltEl);
 	}
 	
-	console.log("RTL: ", rtl);
 	if( validation === true ){
-		rtl = rtlEl.is(":checked");
-		if(rtl === true){
-			drawRltLine();
-			rtl = 1;
-		}else{
-			rtl = 0;
-			if(rtlLine !== false){
-				controlMap.removeLayer(rtlLine);
-			}
-		}
-		
-		
 		/*pathPoints.push(
 			{
 				'name':'takeoff',
@@ -253,60 +216,27 @@ addMissionBtn.on('click', function(){
 		);
 		updatePath();*/
 		takeOffAlt = takeOffAltEl.val();
-		alert('Mission added!');
+		// Add Takeoff
+		console.log('Mission Takeoff( '+ takeOffAlt +' ) added.');
 	}
 });
 
-function addRedBorder(el){
-	el.addClass('border-red');
-}
-function removeRedBorder(el){
-	el.removeClass('border-red');
-}
-
-function upload(){
-	var points = pathPoints.slice();
-	points.splice(0,1);
-	
-	var data=[];
-	
-	data.push(	
-		{
-			'name':'takeoff',
-			'lng':-1,
-			'lat':-1,
-			'alt':parseInt(takeOffAlt)
-		}
-	);
-	
-	var data = data.concat(points);
-	
-	data.push(
-		{
-			'name':'rtl',
-			'lng':-1,
-			'lat':-1,
-			'alt':rtl
-		}
-	);
-	
-	console.log(data);
-	
-	var mission = { 'Mission':data.slice() };
-	
-	if( takeOffAlt === '' ){
-		alert('Please set take off altitude.');
+addMissionRtlBtn.on('click', function(){
+	rtl = rtlEl.is(":checked");
+	/*if(rtl === true){
+		drawRltLine();
+		rtl = 1;
 	}else{
-		socket.emit('mission', mission);
-		
-		alert('Uploaded!');
-		console.log(rtl);
-		console.log(parseInt(takeOffAlt));
-		console.log(mission);
-	}
-}
-
-
+		rtl = 0;
+		if(rtlLine !== false){
+			controlMap.removeLayer(rtlLine);
+		}
+	}*/
+	
+	takeOffAlt = takeOffAltEl.val();
+	// Add RTL
+	console.log('Mission RTL added.');
+});
 forceLand.on('click', function(){
 	socket.emit('force_land');
 	console.log('force_land');
@@ -356,28 +286,7 @@ clearLogsBtn.on('click', function(){
 	firstLog = true;
 });
 
-var firstLog = true;
-function addLog(log){
-	var scrollBottom = false;
-	var bottomScrollPos = logsEl.height() - logsInner.height();
-	if( bottomScrollPos == logsInner.scrollTop() ) scrollBottom=true;
-	
-	var dt = new Date();
-	var time = dt.getHours() +':'+ dt.getMinutes() +':'+ dt.getSeconds();
-	logsEl.append('<li>['+ time +']:  '+ log +'</li>');
-	
-	console.log( scrollBottom );
-	console.log( firstLog );
-	
-	bottomScrollPos = logsEl.height() - logsInner.height();
-	if( bottomScrollPos > 0){
-		if( scrollBottom || firstLog ){
-			logsInner.scrollTop(bottomScrollPos);
-			firstLog = false;
-		}
-	}
-	console.log(bottomScrollPos +' == '+ logsInner.scrollTop());
-}
+
 
 $('.menu .item')
   .tab()
