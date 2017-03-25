@@ -1,11 +1,7 @@
-#control_map{
-	width: 900px;
-	height: 600px;
-	cursor: default;
-}
 ul{
 	list-style: none;
-	margin-top: 5px;
+	margin-top: 0px;
+	padding-left: 0px;
 }
 .border-red{
 	border: 2px solid red;
@@ -28,23 +24,40 @@ ul{
     position: relative;
     bottom: 3px;
 }
+
 #logs_tab .logs_data > li{
-	margin-left: 3px;
     font-size: 12px;
     line-height: 16px;
 }
-.link_style{
-	color: #0275d8;
+
+.close_style{
+	color: #B71C1C;
     text-decoration: none;
 	cursor: pointer;
 }
-.link_style:hover{
-	color: #014c8c;
-    text-decoration: underline;
-}
+
 .moving_arrows .arrow{
 	cursor: pointer;
+	color: #212121;
 }
-.moving_arrows .arrow:hover{
-	color: lightgray;
+
+.vjs-big-play-button {
+	margin-top: 170px;
+    margin-left: 40%;
+}
+
+.grid {
+	margin-top: 0 !important;
+}
+
+.column {
+	padding-top: 0px !important;
+}
+
+.padding-2 {
+	padding-top: 2px !important;
+}
+
+.green {
+	color: #1B5E20;
 }

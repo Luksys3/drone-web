@@ -18,7 +18,6 @@ var logsContainer = $('#logs_tab');
 var logsInner = $('#logs_tab .logs_tab_inner');
 var logsEl = $('[data-field=logs]');
 var clearLogsBtn = $('#clear_logs');
-
 var takeOffAlt='', rtl=false;
 
 var pointMovingArrows = $('#point_moving_arrows_template');
@@ -26,8 +25,9 @@ pointMovingArrows.remove();
 
 // Socket connection
 var socket = io.connect('http://localhost:8001');
-socket.on('connect',function() {
+socket.on('response',function(data) {
 	console.log('Client has connected to the server!');
+	addLog(data["data"])
 });
 
 var droneLat = 54.554699;
@@ -65,7 +65,7 @@ var pointsCircles = [];
 
 pathPointsContainter.text('');
 pathPointsContainter.append('<ul>');
-pathPointsContainter.find('ul').append('<li>Drone - ('+ droneLat +', '+ droneLat +')</li>');
+pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLat +')</li>');
 	
 function addPointToPath(point){
 	pathPoints = path._latlngs;
@@ -122,7 +122,7 @@ function updatePath(){
 				
 			/*if( point.name == 'fly_to' ){
 				console.log(point.name);*/
-				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index) +' - ('+ point.lat +', '+ point.lng +', '+ point.alt +')</li>');
+				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index) +' ('+ point.lat +', '+ point.lng +', '+ point.alt +')</li>');
 			/*}else if( point.name == 'takeoff' ){
 				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index) +' - '+ point.name +'('+ point.alt +')</li>');
 			}else if( point.name == 'rtl' ){
@@ -145,7 +145,7 @@ function updatePath(){
 			
 			
 		}else{
-			pathPointsContainter.find('ul').append('<li>Drone - ('+ point.lat +', '+ point.lng +')</li>');
+			pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLat +')</li>');
 		}
 	});
 
@@ -331,7 +331,7 @@ airSpeedBtn.on('click', function(){
 });
 clearMissions.on('click', function(){
 	socket.emit('clear_missions');
-	console.log('clear_missions');
+	addLog('Clearing missions!');
 });
 
 
@@ -379,22 +379,6 @@ function addLog(log){
 	console.log(bottomScrollPos +' == '+ logsInner.scrollTop());
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+$('.menu .item')
+  .tab()
+;
