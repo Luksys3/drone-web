@@ -103,12 +103,7 @@ function updatePath(){
 
 		if( (currentPoint.name == 'fly_to' || currentPoint.name == 'rtl') && (nextPoint.name == 'fly_to' || nextPoint.name == 'rtl') ){
 			var currentPointId;
-			/*console.log('currentPoint: ');
-			console.log(currentPoint);
-
-			console.log('pathPoints: ');
-			console.log(pathPoints);*/
-
+			
 			$.each(pathPoints, function(index, point){
 				console.log(index);
 				if( currentPoint.lat == point.lat && currentPoint.lng == point.lng ){
@@ -119,8 +114,6 @@ function updatePath(){
 					}
 				}
 			});
-			/*console.log('currentPointId: ', currentPointId);
-			console.log('currentPointId+dir: ', currentPointId+dir);*/
 
 			value = pathPoints[currentPointId+dir];
 			pathPoints[currentPointId+dir] = pathPoints[currentPointId];
