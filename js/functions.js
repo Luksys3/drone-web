@@ -130,40 +130,9 @@ function updatePath(){
 }
 
 function upload(){
-	var points = pathPoints.slice();
-	points.splice(0,1);
+	socket.emit('mission', window.missions);
 
-	var data=[];
-
-	data.push(
-		{
-			'name':'takeoff',
-			'lng':-1,
-			'lat':-1,
-			'alt':parseInt(takeOffAlt)
-		}
-	);
-
-	var data = data.concat(points);
-
-	data.push(
-		{
-			'name':'rtl',
-			'lng':-1,
-			'lat':-1,
-			'alt':rtl
-		}
-	);
-
-	var mission = { 'Mission':data.slice() };
-
-	if( takeOffAlt === '' ){
-		alert('Please set take off altitude.');
-	}else{
-		socket.emit('mission', mission);
-
-		alert('Uploaded!');
-	}
+	addLog('Mission uploaded!');
 }
 
 var firstLog = true;
