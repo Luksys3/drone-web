@@ -31,6 +31,9 @@ socket.on('disconnected',function() {
 droneLat = 54.554699;
 droneLng = 23.334518;
 
+var droneLatLng = L.latLng(droneLat, droneLng);
+droneLatLng.name = 'drone';
+
 // Create map
 controlMapEl.on('contextmenu', event => event.preventDefault());
 var controlMap = L.map('control_map').setView([droneLat, droneLng], 17);
@@ -107,17 +110,19 @@ addMissionTakeoffBtn.on('click', function(){
 });
 
 addMissionRtlBtn.on('click', function(){
+	var rtlId = makeid();
 	window.missions.push({
+		id: rtlId,
 		lat: droneLat,
 		lng: droneLng,
 		name: 'rtl'
 	});
 
-	pathPoints.push({
-		lat: droneLat,
-		lng: droneLng,
-		name: 'rtl'
-	});
+	var rtlObj = L.latLng(droneLat, droneLng);
+	rtlObj.name = 'rtl';
+	rtlObj.id = rtlId;
+
+	pathPoints.push( rtlObj );
 	updatePath();
 });
 

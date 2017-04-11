@@ -1,4 +1,4 @@
-function addPointToPath(point, color=''){
+function addPointToPath(point){
 	pathPoints = path._latlngs;
 	pathPoints.push(point);
 	window.missions.push({
@@ -24,7 +24,8 @@ function removePathPoint(point, pointCircle){
 
 function updatePath(){
 	controlMap.removeLayer(path);
-	if( pathPoints !== false ) pathPoints.unshift([droneLat, droneLng]);
+
+	if( pathPoints[0].lat != droneLat && pathPoints[0].lng != droneLng ) pathPoints.unshift(droneLatLng);
 
 	$.each(pathPointsCircle, function(){
 		controlMap.removeLayer(this);
@@ -101,16 +102,16 @@ function updatePath(){
 		nextPoint = window.missions[id+dir];
 		var value;
 
-		if( (currentPoint.name == 'fly_to' || currentPoint.name == 'rtl') && (nextPoint.name == 'fly_to' || nextPoint.name == 'rtl') ){
+		if( (currentPoint.name === 'fly_to' || currentPoint.name === 'rtl') && (nextPoint.name == 'fly_to' || nextPoint.name == 'rtl') ){
 			var currentPointId;
-			
 			$.each(pathPoints, function(index, point){
-				console.log(index);
-				if( currentPoint.lat == point.lat && currentPoint.lng == point.lng ){
-					console.log('name: ', currentPoint.name);
-					if( currentPoint.name == 'fly_to' || currentPoint.name == 'rtl' ){
+				if( index != 0 ){
+					if( currentPoint.lat == point.lat && currentPoint.lng == point.lng ){
 						currentPointId = index;
-						//return false;
+						if( currentPoint.name == 'rtl' && currentPoint.id === point.id ){
+							currentPointId = index;
+							return false;
+						}
 					}
 				}
 			});
@@ -182,4 +183,12 @@ function addLog(log){
 			firstLog = false;
 		}
 	}
+}
+
+function makeid(len=5){
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < len; i++ )
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+    return text;
 }
