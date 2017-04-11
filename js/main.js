@@ -72,12 +72,12 @@ controlMap.on('click', function(e){
 			point.alt = alt;
 		point.name = 'fly_to';
 		addPointToPath(point);
-		controlMap.closePopup(); 
+		controlMap.closePopup();
 	});
 
 });
 
-var path = L.polyline([[droneLat, droneLng]]).addTo(controlMap);
+var path = L.polyline([]).addTo(controlMap);
 var pathPoints=false, pathPointsCircle=[];
 var lastPoint, rtlLine=false;
 var pointsCircles = [];
@@ -108,10 +108,16 @@ addMissionTakeoffBtn.on('click', function(){
 
 addMissionRtlBtn.on('click', function(){
 	window.missions.push({
+		lat: droneLat,
+		lng: droneLng,
 		name: 'rtl'
 	});
 
-	pathPoints.push({lat: droneLat, lng: droneLng});
+	pathPoints.push({
+		lat: droneLat,
+		lng: droneLng,
+		name: 'rtl'
+	});
 	updatePath();
 });
 
