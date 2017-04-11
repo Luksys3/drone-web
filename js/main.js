@@ -1,6 +1,5 @@
 var controlMapEl = $('#control_map');
 var clearPathButton = $('#clear_path');
-var altitudeEl = $('#altitude');
 var rtlEl = $('#rtl');
 var uploadBtn = $('#upload_button');
 var addMissionTakeoffBtn = $('#add_mission_takeoff');
@@ -25,34 +24,30 @@ var takeOffAlt='', rtl=false;
 var pointMovingArrows = $('#point_moving_arrows_template');
 pointMovingArrows.remove();
 
+window.missions = [];
+
 // Socket connection
 var socket = io.connect('http://localhost:8001');
 socket.on('response',function(data) {
-	console.log('Client has connected to the server!');
-	addLog(data["data"])
-});
-socket.on('disconnected',function() {
-	console.log('Disconnected from server!');
+	addLog('Client has connected to the server!');
 });
 
-// Get logs
-socket.on("response", function(log){
-	addLog( log["data"] );
+socket.on('disconnected',function() {
+	addLog('Disconnected from server!');
 });
 
 // Drone coordinates
 var droneLat = 54.554699;
 var droneLng = 23.334518;
 
-
 controlMapEl.on('contextmenu', event => event.preventDefault());
 
 // Create map
 var controlMap = L.map('control_map').setView([droneLat, droneLng], 17);
 
-// Add map background
-var roads = L.gridLayer.googleMutant({
-	type: 'hybrid' // valid values are 'roadmap', 'satellite', 'terrain' and 'hybrid'
+L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey={apikey}', {
+	maxZoom: 22,
+	apikey: '643948fbea8e4ebfa11bdf726b0ff88d'
 }).addTo(controlMap);
 
 // Draw drone position on map
@@ -65,11 +60,31 @@ var droneMarker = L.circle([droneLat, droneLng], {
 
 
 // On map click add new point
+var popup = L.popup({
+	closeButton: false
+});
+
 controlMap.on('click', function(e){
-	var point = e.latlng;
-	point.alt = getAltitude();
-	point.name = 'fly_to';
-	addPointToPath(point);
+	popup
+        .setLatLng(e.latlng)
+        .setContent("<form id='alt-map'><input type='number' id='alt' class='form-control' style='border: 1px dashed black !important; width: 200px' placeholder='Choose altitude' autofocus/></form>")
+        .openOn(controlMap);
+
+	window.latlng = e.latlng;
+
+	$("#alt-map").submit(function(e){
+		e.preventDefault();
+		var point = window.latlng;
+		var alt = $("#alt").val();
+		if(alt == '')
+			point.alt = 5;
+		else
+			point.alt = alt;
+		point.name = 'fly_to';
+		addPointToPath(point);
+		controlMap.closePopup(); 
+	});
+
 });
 
 
@@ -86,6 +101,9 @@ pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" a
 function removePathPoint(point, pointCircle){
 	controlMap.removeLayer(pointCircle);
 	pathPoints = jQuery.grep(pathPoints, function(value) {
+		return value.lat != point.lat && value.lng != point.lng;
+	});
+	window.missions = jQuery.grep(window.missions, function(value) {
 		return value != point;
 	});
 	
@@ -101,10 +119,10 @@ function updatePath(){
 	
 	pathPointsContainter.text('');
 	pathPointsContainter.append('<ul>');
-	$.each(pathPoints, function(index){
-		var point = this;
-		if(index != 0){
-			//if( point.name == 'fly_to' ){
+	pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLat +')</li>');
+	$.each(window.missions, function(index, point){
+		//if(index != 0){
+			if( point.name == 'fly_to' ){
 				pointsCircles[index] = L.circle(point, {
 					color: 'yellow',
 					fillColor: 'yellow',
@@ -119,24 +137,23 @@ function updatePath(){
 						removePathPoint(point, pointsCircles[index]);
 					}
 				});
-			//}
+			}
 			
 			var moving_arrows = pointMovingArrows.clone();
 			moving_arrows.find('.arrow').attr('id', index);
 			
-			if( index == 1 ) moving_arrows.find('[move=up].arrow').remove();
-			if( pathPoints.length-1 == index ) moving_arrows.find('[move=down].arrow').remove();
+			if( index == 0 ) moving_arrows.find('[move=up].arrow').remove();
+			if( window.missions.length-1 == index ) moving_arrows.find('[move=down].arrow').remove();
 			
 			var moving_arrows_html = moving_arrows.html();
 				
-			/*if( point.name == 'fly_to' ){
-				console.log(point.name);*/
-				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index) +' ('+ point.lat +', '+ point.lng +', '+ point.alt +')</li>');
-			/*}else if( point.name == 'takeoff' ){
-				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index) +' - '+ point.name +'('+ point.alt +')</li>');
+			if( point.name == 'fly_to' ){
+				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +' ('+ point.lat.toString().substring(0, 10) +', '+ point.lng.toString().substring(0, 10) +', '+ point.alt +')</li>');
+			}else if( point.name == 'takeoff' ){
+				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +' - '+ point.name +'('+ point.alt +')</li>');
 			}else if( point.name == 'rtl' ){
-				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index) +' - '+ point.name +'('+ point.alt +')</li>');
-			}*/
+				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +' - '+ point.name +'('+ point.alt +')</li>');
+			}
 			
 			pathPointsContainter.find('ul #'+ index).unbind('mouseover');
 			pathPointsContainter.find('ul #'+ index).on('mouseover', function(){
@@ -152,10 +169,9 @@ function updatePath(){
 			
 			
 			
-			
-		}else{
+		/*}else{
 			pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLat +')</li>');
-		}
+		}*/
 	});
 
 	/*var pointsToDraw = deepCopy(pathPoints);
@@ -163,12 +179,12 @@ function updatePath(){
 		if( i==0 ) return true;
 		return value.name == 'fly_to';
 	});*/
-	path = L.polyline(pathPoints).addTo(controlMap).bringToBack();
+
+	path = L.polyline(pathPoints, {
+		color: 'blue'
+	}).addTo(controlMap).bringToBack();
 	
 	
-	if(rtl.checked === true){
-		drawRltLine();
-	}
 	
 	var movingArrowEl = $('.moving_arrows .arrow');
 	movingArrowEl.unbind('click');
@@ -178,10 +194,23 @@ function updatePath(){
 		else if( el.attr('move') == 'down' ) dir = 1;
 		
 		var id = parseInt( el.attr('id') );
-		var value = pathPoints[id+dir];
+		var value = window.missions[id+dir];
 		
-		pathPoints[id+dir] = pathPoints[id];
-		pathPoints[id] = value;
+		window.missions[id+dir] = window.missions[id];
+		window.missions[id] = value;
+
+		currentPoint = window.missions[id];
+		nextPoint = window.missions[id+dir];
+		var currentPointId;
+
+		$.each(pathPoints, function(index, point){
+			if( currentPoint.lat == point.lat && currentPoint.lng == point.lng ){
+				currentPointId = index;
+			}
+		});
+		
+		pathPoints[currentPointId+dir] = pathPoints[currentPointId];
+		pathPoints[currentPointId] = value;
 		
 		updatePath();
 	});
@@ -197,46 +226,27 @@ uploadBtn.on('click', function(){
 
 
 addMissionTakeoffBtn.on('click', function(){
-	var validation = true;
-	if( takeOffAltEl.val() == '' ){
-		addRedBorder(takeOffAltEl);
-		validation = false;
-	}else{
-		removeRedBorder(takeOffAltEl);
-	}
-	
-	if( validation === true ){
-		/*pathPoints.push(
-			{
-				'name':'takeoff',
-				'lng':-1,
-				'lat':-1,
-				'alt':parseInt(takeOffAlt)
-			}
-		);
-		updatePath();*/
+	var takeOffAlt = 0;
+	if( takeOffAltEl.val() == '' )
+		takeOffAlt = 5;
+	else
 		takeOffAlt = takeOffAltEl.val();
-		// Add Takeoff
-		console.log('Mission Takeoff( '+ takeOffAlt +' ) added.');
-	}
+	window.missions.push({
+		name: 'takeoff',
+		alt: Number(takeOffAlt),
+	});
+	updatePath();
 });
 
 addMissionRtlBtn.on('click', function(){
-	rtl = rtlEl.is(":checked");
-	/*if(rtl === true){
-		drawRltLine();
-		rtl = 1;
-	}else{
-		rtl = 0;
-		if(rtlLine !== false){
-			controlMap.removeLayer(rtlLine);
-		}
-	}*/
-	
-	takeOffAlt = takeOffAltEl.val();
-	// Add RTL
-	console.log('Mission RTL added.');
+	window.missions.push({
+		name: 'rtl'
+	});
+
+	pathPoints.push({lat: droneLat, lng: droneLng});
+	updatePath();
 });
+
 forceLand.on('click', function(){
 	socket.emit('force_land');
 	console.log('force_land');
@@ -245,6 +255,13 @@ forceRtl.on('click', function(){
 	socket.emit('force_rtl');
 	console.log('force_rtl');
 });
+
+
+$('#takeoff').on('click', function(){
+	socket.emit('force_rtl');
+	
+});
+
 airSpeedBtn.on('click', function(){
 	var validation = true;
 	if( airSpeedEl.val() == '' ){
@@ -259,35 +276,13 @@ airSpeedBtn.on('click', function(){
 		console.log('set_airspeed: '+ parseInt(airSpeedEl.val()));
 	}
 });
+
 clearMissions.on('click', function(){
 	socket.emit('clear_missions');
 	addLog('Clearing missions!');
 });
 
-
-pathPointsBtn.on('click', function(){
-	logsContainer.hide();
-	pathPointsContainter.fadeIn();
-});
-logsBtn.on('click', function(){
-	pathPointsContainter.hide();
-	logsContainer.fadeIn();
-});
-
-
-/* For debugging */
-$('#add_log').on('click', function(){
-	addLog('Drone mission failed.');
-});
-/* #For debugging */
-
 clearLogsBtn.on('click', function(){
 	logsEl.html('');
 	firstLog = true;
 });
-
-
-
-$('.menu .item')
-  .tab()
-;

@@ -1,20 +1,24 @@
+html, body {
+	background-color: #37474F;
+	color: white;
+	font-weight: 900;
+	overflow-x: hidden;
+}
+
 ul{
 	list-style: none;
 	margin-top: 0px;
 	padding-left: 0px;
 }
+
 .border-red{
 	border: 2px solid red;
 }
-#logs_tab{
-    margin-top: 20px;
-}
+
 #logs_tab .logs_tab_inner{
-    background-color: #f1f1f1;
-    border: 1px solid #b1b1b1;
 	width: 100%;
 	max-width: 800px;
-	height: 300px;
+	height: 200px;
     position: relative;
 	overflow: auto;
 }
@@ -23,17 +27,6 @@ ul{
 	padding: 0;
     position: relative;
     bottom: 3px;
-}
-
-#logs_tab .logs_data > li{
-    font-size: 12px;
-    line-height: 16px;
-}
-
-.close_style{
-	color: #B71C1C;
-    text-decoration: none;
-	cursor: pointer;
 }
 
 .moving_arrows .arrow{
@@ -46,18 +39,64 @@ ul{
     margin-left: 40%;
 }
 
-.grid {
-	margin-top: 0 !important;
-}
-
-.column {
-	padding-top: 0px !important;
-}
-
-.padding-2 {
-	padding-top: 2px !important;
-}
-
 .green {
-	color: #1B5E20;
+	color: #4CAF50;
+}
+
+.box {
+	border: 3px dashed #ECEFF1;
+	margin: 5px;
+	padding: 5px;
+	border-radius: 8px;
+}
+
+.form-control {
+	border: 1px solid white !important;
+}
+
+.input-group-addon {
+	background-color: #263238;
+	color: white;
+	font-weight: 900;
+	width: 150px;
+}
+
+.custom-btn {
+	background-color: #263238 !important;
+	color: white;
+	font-weight: 900;
+	border-bottom-left-radius: 0px;
+	border-top-left-radius: 0px;
+	cursor: pointer;
+}
+
+.custom-btn-1 {
+	background-color: #263238 !important;
+	color: white;
+	font-weight: 900;
+	cursor: pointer;
+	height: 50px;
+}
+
+.nav-link.active {
+	background-color: #263238 !important;
+}
+
+a {
+	color: white;
+}
+
+a:hover {
+	color: #CFD8DC;
+}
+
+.alert-dark {
+	background-color: #546E7A;
+}
+
+.alert {
+	margin-bottom: 6px;
+	height: 25px;
+	line-height: 1;
+	padding: 4px 5px;
 }
