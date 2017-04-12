@@ -261,3 +261,15 @@ $('#settings').on('click', function(e){
 	e.preventDefault();
 	$('#modal').iziModal('open', this);
 });
+
+$('#update_settings').on('click', function(e){
+	var settings = [];
+	var settingsInputs = $('#settings .setting');
+	$.each(settingsInputs, function(i, value){
+		settings.push({
+			name: $(value).attr('name'),
+			value: $(value).val()
+		});
+	});
+	updateSettings( settings );
+});

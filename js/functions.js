@@ -147,7 +147,7 @@ function addLog(log, server = false){
 	var time = dt.getHours() +':'+ dt.getMinutes() +':'+ dt.getSeconds();
 	if(!server)
 		logsEl.append('<li>['+ time +']:  '+ log +'</li>');
-	else 
+	else
 		logsEl.append('<li style="color: #FFCDD2;">['+ time +']:  '+ log +'</li>');
 
 	bottomScrollPos = logsEl.height() - logsInner.height();
@@ -174,7 +174,7 @@ function changeButtons(connected, armed){
 	} else {
 		$('#connect').html('Connect');
 		$('#connect').attr('style', 'background-color: #004D40 !important');
-		
+
 	}
 
 	if(armed){
@@ -183,6 +183,24 @@ function changeButtons(connected, armed){
 	} else {
 		$('#arm').html('Arm');
 		$('#arm').attr('style', 'background-color: #004D40 !important');
-		
+
 	}
+}
+
+function getSettings( settings ){
+	var settingsCon = $('#set #settings');
+	settingsCon.text('');
+	$.each(settings, function(i, set){
+		settingsCon.append(
+			'<div class="input-group" style="padding-top: 5px;">'+
+				'<div class="input-group-addon no-border-radius" style="border-left:0;">'+ set.name +'</div>'+
+				'<input type="text" class="form-control no-border-radius setting" name="'+ set.name +'" value="'+ set.value +'">'+
+			'</div>'
+		);
+	});
+}
+
+function updateSettings( settings ){
+	socket.emit('settings', settings);
+	addLog('Settings has been updated.');
 }

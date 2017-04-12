@@ -14,6 +14,9 @@ ul{
 .border-red{
 	border: 2px solid red;
 }
+.no-border-radius{
+	border-radius: 0;
+}
 
 #logs_tab .logs_tab_inner{
 	width: 100%;
@@ -44,7 +47,7 @@ ul{
 }
 
 .upload {
-	width: 50%; 
+	width: 50%;
 	border-right: 2px solid #0F1213;
 }
 

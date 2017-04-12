@@ -6,6 +6,7 @@ socket.on('connect', function(){
 	addLog('Client has connected to the server!');
 	connected = true;
 	changeButtons(connected, armed);
+	getSettings(settings);
 });
 
 // ---- Print logs from server ----
@@ -37,7 +38,7 @@ socket.on('location', function(data){
     var newLatLng = new L.LatLng(data['lat'], data['lng']);
 	controlMap.panTo(newLatLng);
     try {
-		droneMarker.setLatLng(newLatLng); 
+		droneMarker.setLatLng(newLatLng);
 	} catch(e) { }
 	droneLatLng = L.latLng(droneLat, droneLng);
 	updatePath();
