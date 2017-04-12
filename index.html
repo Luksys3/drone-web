@@ -5,6 +5,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.1.1/css/iziToast.min.css" />
 	<link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -37,7 +39,7 @@
 						<button id="add_mission_change_alt" class="btn btn-default custom-btn">Add</button>
 					</div>
 
-					<button id="force_land" style="margin-top: 5px;" class="btn btn-block btn-default custom-btn-1">Land</button>
+					<button id="mission_land" style="margin-top: 5px;" class="btn btn-block btn-default custom-btn-1">Land</button>
 					<button id="add_mission_rtl" style="margin-top: 5px;" class="btn btn-block btn-default custom-btn-1">Return to launch</button>
 
 					<div class="btn-group" style="width: 100%; margin-top: 5px;" data-toggle="buttons">
@@ -53,35 +55,35 @@
 
 				<div class="box">
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>LONGITUDE</strong> <span style="float: right;"><span id="info_lng">0.00000</span> °</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>LATITUDE</strong> <span style="float: right;"><span id="info_lat">0.00000</span> °</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>ALTITUDE</strong> <span style="float: right;"><span id="info_alt">0.00</span> m</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>SPEED</strong> <span style="float: right;"><span id="info_speed">0.00</span> m/s</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>PITCH</strong> <span style="float: right;"><span id="info_pitch">0.00</span> </span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>YAW</strong> <span style="float: right;"><span id="info_yaw">0.00</span> </span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>ROLL</strong> <span style="float: right;"><span id="info_roll">0.00</span> </span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;">0.00 km/s</span>
+						<strong>BATTERY</strong> <span style="float: right;"><span id="info_battery">0.00</span> %</span>
 					</div>
 				</div>
 
@@ -128,11 +130,37 @@
 
 	</div>
 
+	<div class="settings" id="settings">
+		<i class="fa fa-cog" aria-hidden="true"></i>
+	</div>
+
+	<div id="modal">
+		<ul class="nav nav-tabs nav-fill" role="tablist" id="modal-nav">
+			<li class="nav-item">
+				<a class="nav-link active" href="#com" role="tab" data-toggle="tab">Commands</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#set" role="tab" data-toggle="tab">Settings</a>
+			</li>
+		</ul>
+
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="com">
+				<button id="force_land" class="btn btn-default custom-btn-2">Force Land</button>
+			</div>
+			<div role="tabpanel" class="tab-pane" id="set">
+				
+			</div>
+		</div>
+	</div>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.1.1/js/iziToast.min.js"></script>
 
 	<script src="js/functions.js"></script>
 	<script src="js/main.js"></script>

@@ -16,7 +16,12 @@ var pointMovingArrows = $('#point_moving_arrows_template');
 pointMovingArrows.remove();
 
 window.missions = [];
-var droneLat, droneLng;
+var droneLat, droneLng, currentLng, currentLat, firstTime = false;
+var droneMarker;
+
+// DEBUG COORDINATES
+droneLat = 54.554699;
+droneLng = 23.334518;
 
 // Socket connection
 var socket = io.connect('http://localhost:8001');
@@ -24,18 +29,47 @@ socket.on('response',function() {
 	addLog('Client has connected to the server!');
 });
 
+socket.on('gyro', function(data){
+	$('#info_pitch').html(data['pitch']);
+	$('#info_roll').html(data['roll']);
+	$('#info_yaw').html(data['yaw']);
+});
+
+socket.on('log', function(data){
+	addLog(data);
+});
+
+socket.on('location', function(data){
+
+	if(!firstTime){
+		droneLat = data['lat'];
+		droneLng = data['lng'];
+		firstTime = true;
+	}
+
+	currentLng = data['lng'];
+	currentLat = data['lat'];
+
+	$('#info_lat').html(data['lat']);
+	$('#info_lng').html(data['lng']);
+	$('#info_alt').html(data['alt']);
+
+    var newLatLng = new L.LatLng(data['lat'], data['lng']);
+    try {
+		droneMarker.setLatLng(newLatLng); 
+	} catch(e) { }
+
+});
+
 socket.on('disconnected',function() {
 	addLog('Disconnected from server!');
 });
-
-droneLat = 54.554699;
-droneLng = 23.334518;
 
 var droneLatLng = L.latLng(droneLat, droneLng);
 droneLatLng.name = 'drone';
 
 // Create map
-controlMapEl.on('contextmenu', event => event.preventDefault());
+//controlMapEl.on('contextmenu', event => event.preventDefault());
 var controlMap = L.map('control_map').setView([droneLat, droneLng], 17);
 
 L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey={apikey}', {
@@ -43,13 +77,12 @@ L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?ap
 	apikey: '643948fbea8e4ebfa11bdf726b0ff88d'
 }).addTo(controlMap);
 
-var droneMarker = L.circle([droneLat, droneLng], {
+droneMarker = L.circle([droneLat, droneLng], {
 	color: '#F44336',
 	fillColor: '#F44336',
 	fillOpacity: 1,
 	radius: 1.7
 }).addTo(controlMap);
-
 
 // On map click add new point
 var popup = L.popup({
@@ -78,6 +111,8 @@ controlMap.on('click', function(e){
 		controlMap.closePopup();
 	});
 
+	addLog('Fly to location mission added;');
+
 });
 
 var path = L.polyline([]).addTo(controlMap);
@@ -91,6 +126,7 @@ pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" a
 
 uploadBtn.on('click', function(){
 	upload();
+	addLog('Missions uploaded to the server;');
 });
 
 addMissionTakeoffBtn.on('click', function(){
@@ -107,6 +143,7 @@ addMissionTakeoffBtn.on('click', function(){
 
 	updatePath();
 	takeOffAltEl.val('');
+	addLog('Take off mission added;');
 });
 
 addMissionRtlBtn.on('click', function(){
@@ -122,8 +159,14 @@ addMissionRtlBtn.on('click', function(){
 	rtlObj.name = 'rtl';
 	rtlObj.id = rtlId;
 
-	pathPoints.push( rtlObj );
+	if(pathPoints != false)
+		pathPoints.push( rtlObj );
+	else {
+		pathPoints = [];
+		pathPoints.push( rtlObj );
+	}
 	updatePath();
+	addLog('Return to launch mission added;');
 });
 
 $('#add_mission_change_alt').on('click', function(){
@@ -138,24 +181,44 @@ $('#add_mission_change_alt').on('click', function(){
 	});
 	updatePath();
 	$('#change_altitude').val('');
+	addLog('Change altitude mission added;');
 });
 
-forceLand.on('click', function(){
-	socket.emit('force_land');
-	console.log('force_land');
-});
-
-forceRtl.on('click', function(){
-	socket.emit('force_rtl');
-	console.log('force_rtl');
+$('#mission_land').on('click', function(){
+	window.missions.push({
+		name: 'land'
+	});
+	updatePath();
+	addLog('Land mission added;');
 });
 
 clearMissions.on('click', function(){
 	socket.emit('clear_missions');
-	addLog('Clearing missions!');
+	pathPoints = false;
+	window.missions = [];
+	updatePath();
+	addLog('Clearing all the missions;');
 });
 
 clearLogsBtn.on('click', function(){
 	logsEl.html('');
 	firstLog = true;
+});
+
+$(document).on("click", "#force_land", function(event){
+	socket.emit('force_land');
+	iziToast.show({
+    	title: 'FORCE_LAND was emmited to the server!',
+		color: 'green'
+	});
+	addLog('Doing FORCE_LAND;');
+});
+
+$("#modal").iziModal({
+	title: 'Advanced options',
+	headerColor: '#263238',
+});
+
+$('#settings').on('click', function(){
+	$('#modal').iziModal('open', this);
 });

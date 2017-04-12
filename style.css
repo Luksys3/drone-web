@@ -78,6 +78,14 @@ ul{
 	height: 50px;
 }
 
+.custom-btn-2 {
+	background-color: #263238 !important;
+	color: white;
+	cursor: pointer;
+	height: 40px;
+	border-radius: 0px;
+}
+
 .nav-link.active {
 	background-color: #263238 !important;
 }
@@ -99,4 +107,47 @@ a:hover {
 	height: 25px;
 	line-height: 1;
 	padding: 4px 5px;
+}
+
+.settings {
+	background-color: #263238;
+	width: 35px;
+	height: 37px;
+	border-bottom-left-radius: 10px;
+	border-top-left-radius: 10px;
+	font-size: 25px;
+	padding-left: 6px;
+	position: fixed;
+    left: calc(100% - 35px);
+    top: 200px;
+	cursor: pointer;
+}
+
+.iziModal-content {
+	color: #263238;
+	font-weight: normal;
+}
+
+#modal {
+	border-top-left-radius: 0px !important;
+	border-top-right-radius: 0px !important;
+	border: 1px solid #263238;
+}
+
+#modal-nav a {
+	color: #263238;
+}
+
+#modal-nav .nav-link.active {
+	color: white;
+	background-color: #455A64 !important;
+	border: 1px solid #455A64;
+}
+
+#modal-nav .nav-link {
+	border-radius: 0px;
+}
+
+.leaflet-control-attribution {
+	display: none !important;
 }

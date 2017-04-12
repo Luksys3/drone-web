@@ -25,7 +25,8 @@ function removePathPoint(point, pointCircle){
 function updatePath(){
 	controlMap.removeLayer(path);
 
-	if( pathPoints[0].lat != droneLat && pathPoints[0].lng != droneLng ) pathPoints.unshift(droneLatLng);
+	if( pathPoints != false)
+		if( pathPoints[0].lat != droneLat && pathPoints[0].lng != droneLng ) pathPoints.unshift(droneLatLng);
 
 	$.each(pathPointsCircle, function(){
 		controlMap.removeLayer(this);
@@ -68,6 +69,8 @@ function updatePath(){
 				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +'. Return to launch</li>');
 			} else if( point.name == 'change_alt' ){
 				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +'. Change altitude to ' + point.alt + '</li>');
+			} else if( point.name == 'land' ){
+				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +'. Lands on the current possition</li>');
 			}
 
 			pathPointsContainter.find('ul #'+ index).unbind('mouseover');
