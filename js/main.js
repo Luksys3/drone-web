@@ -3,8 +3,6 @@ var uploadBtn = $('#upload_button');
 var addMissionTakeoffBtn = $('#add_mission_takeoff');
 var addMissionRtlBtn = $('#add_mission_rtl');
 var takeOffAltEl = $('#takeoff_altitude');
-var forceLand = $('#force_land');
-var forceRtl = $('#force_rtl');
 var clearMissions = $('#clear_missions');
 var pathPointsContainter = $('#path_points_tab');
 var logsContainer = $('#logs_tab');
@@ -16,65 +14,19 @@ var pointMovingArrows = $('#point_moving_arrows_template');
 pointMovingArrows.remove();
 
 window.missions = [];
-var droneLat, droneLng, currentLng, currentLat, firstTime = false;
 var droneMarker;
 
-// DEBUG COORDINATES
-droneLat = 54.554699;
-droneLng = 23.334518;
-
-// Socket connection
-var socket = io.connect('http://localhost:8001');
-socket.on('response',function() {
-	addLog('Client has connected to the server!');
-});
-
-socket.on('gyro', function(data){
-	$('#info_pitch').html(data['pitch']);
-	$('#info_roll').html(data['roll']);
-	$('#info_yaw').html(data['yaw']);
-});
-
-socket.on('log', function(data){
-	addLog(data);
-});
-
-socket.on('location', function(data){
-
-	if(!firstTime){
-		droneLat = data['lat'];
-		droneLng = data['lng'];
-		firstTime = true;
-	}
-
-	currentLng = data['lng'];
-	currentLat = data['lat'];
-
-	$('#info_lat').html(data['lat']);
-	$('#info_lng').html(data['lng']);
-	$('#info_alt').html(data['alt']);
-
-    var newLatLng = new L.LatLng(data['lat'], data['lng']);
-    try {
-		droneMarker.setLatLng(newLatLng); 
-	} catch(e) { }
-
-});
-
-socket.on('disconnected',function() {
-	addLog('Disconnected from server!');
-});
-
+changeButtons(connected, armed);
 var droneLatLng = L.latLng(droneLat, droneLng);
 droneLatLng.name = 'drone';
 
 // Create map
-//controlMapEl.on('contextmenu', event => event.preventDefault());
+controlMapEl.on('contextmenu', event => event.preventDefault());
 var controlMap = L.map('control_map').setView([droneLat, droneLng], 17);
 
-L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png?apikey={apikey}', {
-	maxZoom: 22,
-	apikey: '643948fbea8e4ebfa11bdf726b0ff88d'
+L.tileLayer('http://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}', {
+	maxZoom: 20,
+	subdomains:['mt0','mt1','mt2','mt3']
 }).addTo(controlMap);
 
 droneMarker = L.circle([droneLat, droneLng], {
@@ -85,9 +37,7 @@ droneMarker = L.circle([droneLat, droneLng], {
 }).addTo(controlMap);
 
 // On map click add new point
-var popup = L.popup({
-	closeButton: false
-});
+var popup = L.popup();
 
 controlMap.on('click', function(e){
 	popup
@@ -146,6 +96,7 @@ addMissionTakeoffBtn.on('click', function(){
 	addLog('Take off mission added;');
 });
 
+// TODO: change to armedLocation
 addMissionRtlBtn.on('click', function(){
 	var rtlId = makeid();
 	window.missions.push({
@@ -205,6 +156,8 @@ clearLogsBtn.on('click', function(){
 	firstLog = true;
 });
 
+// ----- DIRECT -----
+
 $(document).on("click", "#force_land", function(event){
 	socket.emit('force_land');
 	iziToast.show({
@@ -214,11 +167,97 @@ $(document).on("click", "#force_land", function(event){
 	addLog('Doing FORCE_LAND;');
 });
 
+$(document).on("click", "#force_rtl", function(event){
+	socket.emit('force_rtl');
+	iziToast.show({
+    	title: 'FORCE_RTL was emmited to the server!',
+		color: 'green'
+	});
+	addLog('Doing FORCE_RTL;');
+});
+
+$(document).on("click", "#force_auto_mode", function(event){
+	socket.emit('vehicle_auto');
+	iziToast.show({
+    	title: 'VEHICLE_AUTO was emmited to the server!',
+		color: 'green'
+	});
+	addLog('Doing VEHICLE_AUTO;');
+});
+
+$(document).on("click", "#force_guided_mode", function(event){
+	socket.emit('vehicle_guided');
+	iziToast.show({
+    	title: 'VEHICLE_GUIDED was emmited to the server!',
+		color: 'green'
+	});
+	addLog('Doing VEHICLE_GUIDED;');
+});
+
+$(document).on("click", "#force_loiter", function(event){
+	socket.emit('force_loiter');
+	iziToast.show({
+    	title: 'FORCE_LOITER was emmited to the server!',
+		color: 'green'
+	});
+	addLog('Doing FORCE_LOITER;');
+});
+
+$(document).on("click", "#connect", function(event){
+	if(connected){
+		socket.emit('vehicle_disconnect');
+		socket.disconnect();
+		iziToast.show({
+			title: 'Disconecting from the server!',
+			color: 'red'
+		});
+		addLog('Disconnecting from the server;');
+		connected = false;
+	} else {
+		socket = io.connect(server_ip);
+		socket.emit('vehicle_connect');
+		iziToast.show({
+			title: 'Connecting to the server!',
+			color: 'yellow'
+		});
+		addLog('Connecting to the server;');
+		connected = true;
+	}
+	changeButtons(connected, armed);
+});
+
+$(document).on("click", "#arm", function(event){
+	if(armed){
+		socket.emit('disarm');
+		socket.disconnect();
+		iziToast.show({
+			title: 'Disarming the vehicle!',
+			color: 'red'
+		});
+		addLog('Disarming;');
+		armed = false;
+	} else {
+		socket = io.connect(serverIP);
+		socket.emit('arm');
+		iziToast.show({
+			title: 'Arming the vehicle!',
+			color: 'yellow'
+		});
+		addLog('Arming;');
+		armed = true;
+	}
+	changeButtons(connected, armed);
+});
+
+// ----- END -----
+
 $("#modal").iziModal({
 	title: 'Advanced options',
 	headerColor: '#263238',
+	width: '644px'
 });
 
-$('#settings').on('click', function(){
+$('#settings').on('click', function(e){
+	e.preventDefault();
 	$('#modal').iziModal('open', this);
 });

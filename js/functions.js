@@ -34,7 +34,7 @@ function updatePath(){
 
 	pathPointsContainter.text('');
 	pathPointsContainter.append('<ul>');
-	pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLat +')</li>');
+	pathPointsContainter.find('ul').append('<li><i class="fa fa-play-circle green" aria-hidden="true"></i> Launches from ('+ droneLat +', '+ droneLng +')</li>');
 	$.each(window.missions, function(index, point){
 			if( point.name == 'fly_to' ){
 				pointsCircles[index] = L.circle(point, {
@@ -134,19 +134,21 @@ function updatePath(){
 
 function upload(){
 	socket.emit('mission', window.missions);
-
 	addLog('Mission uploaded!');
 }
 
 var firstLog = true;
-function addLog(log){
+function addLog(log, server = false){
 	var scrollBottom = false;
 	var bottomScrollPos = logsEl.height() - logsInner.height();
 	if( bottomScrollPos == logsInner.scrollTop() ) scrollBottom=true;
 
 	var dt = new Date();
 	var time = dt.getHours() +':'+ dt.getMinutes() +':'+ dt.getSeconds();
-	logsEl.append('<li>['+ time +']:  '+ log +'</li>');
+	if(!server)
+		logsEl.append('<li>['+ time +']:  '+ log +'</li>');
+	else 
+		logsEl.append('<li style="color: #FFCDD2;">['+ time +']:  '+ log +'</li>');
 
 	bottomScrollPos = logsEl.height() - logsInner.height();
 	if( bottomScrollPos > 0){
@@ -163,4 +165,24 @@ function makeid(len=5){
     for( var i=0; i < len; i++ )
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
+}
+
+function changeButtons(connected, armed){
+	if(connected){
+		$('#connect').html('Disconnect');
+		$('#connect').attr('style', 'background-color: #B71C1C !important');
+	} else {
+		$('#connect').html('Connect');
+		$('#connect').attr('style', 'background-color: #004D40 !important');
+		
+	}
+
+	if(armed){
+		$('#arm').html('Disarm');
+		$('#arm').attr('style', 'background-color: #B71C1C !important');
+	} else {
+		$('#arm').html('Arm');
+		$('#arm').attr('style', 'background-color: #004D40 !important');
+		
+	}
 }

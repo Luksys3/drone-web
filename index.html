@@ -7,7 +7,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.1.1/css/iziToast.min.css" />
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
 
@@ -54,12 +54,13 @@
 			<div class="col-md-4">
 
 				<div class="box">
-					<div class="alert alert-dark" role="alert">
-						<strong>LONGITUDE</strong> <span style="float: right;"><span id="info_lng">0.00000</span> °</span>
-					</div>
 
 					<div class="alert alert-dark" role="alert">
 						<strong>LATITUDE</strong> <span style="float: right;"><span id="info_lat">0.00000</span> °</span>
+					</div>
+
+					<div class="alert alert-dark" role="alert">
+						<strong>LONGITUDE</strong> <span style="float: right;"><span id="info_lng">0.00000</span> °</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
@@ -67,23 +68,23 @@
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>SPEED</strong> <span style="float: right;"><span id="info_speed">0.00</span> m/s</span>
+						<strong>VERTICAL SPEED</strong> <span style="float: right;"><span id="info_speed_v">0.00</span> m/s</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>PITCH</strong> <span style="float: right;"><span id="info_pitch">0.00</span> </span>
+						<strong>HORIZONTAL SPEED</strong> <span style="float: right;"><span id="info_speed_h">0.00</span> m/s</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>YAW</strong> <span style="float: right;"><span id="info_yaw">0.00</span> </span>
+						<strong>MODE</strong> <span style="float: right;"><span id="info_mode">AUTO</span> </span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>ROLL</strong> <span style="float: right;"><span id="info_roll">0.00</span> </span>
+						<strong>ARMED</strong> <span style="float: right;"><span id="info_armed">NO</span> </span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>BATTERY</strong> <span style="float: right;"><span id="info_battery">0.00</span> %</span>
+						<strong>BATTERY</strong> <span style="float: right;"><span id="info_battery">0.00</span> V</span>
 					</div>
 				</div>
 
@@ -130,9 +131,9 @@
 
 	</div>
 
-	<div class="settings" id="settings">
+	<a class="settings" id="settings">
 		<i class="fa fa-cog" aria-hidden="true"></i>
-	</div>
+	</a>
 
 	<div id="modal">
 		<ul class="nav nav-tabs nav-fill" role="tablist" id="modal-nav">
@@ -147,9 +148,18 @@
 		<div class="tab-content">
 			<div role="tabpanel" class="tab-pane active" id="com">
 				<button id="force_land" class="btn btn-default custom-btn-2">Force Land</button>
+				<button id="force_rtl" class="btn btn-default custom-btn-2">Force RTL</button>
+				<button id="force_auto_mode" class="btn btn-default custom-btn-2">Set Auto Mode</button>
+				<button id="force_guided_mode" class="btn btn-default custom-btn-2">Set Guided Mode</button>
+				<button id="force_loiter" class="btn btn-default custom-btn-2">Force Loiter</button>
+				<br>
+				<div class="btn-group" style="width: 100%;" data-toggle="buttons">
+					<button id="connect" class="btn btn-default custom-btn-2 upload"></button>
+					<button id="arm" class="btn btn-default custom-btn-2 arm">Arm</button>
+				</div>
 			</div>
 			<div role="tabpanel" class="tab-pane" id="set">
-				
+
 			</div>
 		</div>
 	</div>
@@ -163,6 +173,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.1.1/js/iziToast.min.js"></script>
 
 	<script src="js/functions.js"></script>
+	<script src="js/config.js"></script>
+	<script src="js/connection.js"></script>
 	<script src="js/main.js"></script>
 </body>
 </html>

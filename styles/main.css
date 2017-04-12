@@ -43,6 +43,15 @@ ul{
 	color: #4CAF50;
 }
 
+.upload {
+	width: 50%; 
+	border-right: 2px solid #0F1213;
+}
+
+.arm {
+	width: calc(50% + 1px);
+}
+
 .box {
 	border: 3px dashed #ECEFF1;
 	margin: 5px;
@@ -84,6 +93,10 @@ ul{
 	cursor: pointer;
 	height: 40px;
 	border-radius: 0px;
+	display: block;
+	float: left;
+	border-bottom: 1px solid #0F1213;
+	border-right: 1px solid #0F1213;
 }
 
 .nav-link.active {
