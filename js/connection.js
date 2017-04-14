@@ -6,7 +6,7 @@ socket.on('connect', function(){
 	addLog('Client has connected to the server!');
 	connected = true;
 	changeButtons(connected, armed);
-	getSettings(settings);
+	socket.emit('get_config');
 });
 
 // ---- Print logs from server ----
@@ -14,6 +14,10 @@ socket.on('response',function(data) {
 	addLog(data['data'], true);
 });
 
+// ---- Get config ----
+socket.on('config_response', function(data){
+	getSettings(data);
+});
 
 // ---- Update information
 socket.on('gyro', function(data){
