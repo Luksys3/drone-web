@@ -20,17 +20,18 @@ socket.on('config_response', function(data){
 });
 
 // ---- Update information
-socket.on('gyro', function(data){
+socket.on('gyro_info', function(data){
 	//$('#info_pitch').html(data['pitch']);
 	//$('#info_roll').html(data['roll']);
 	//$('#info_yaw').html(data['yaw']);
 });
 
-socket.on('battery', function(data){
-	$('#info_battery').html(data);
+socket.on('battery_info', function(data){
+	$('#info_battery').html(data["voltage"]);
+	$('#info_battery_per').html(data["level"]);
 });
 
-socket.on('location', function(data){
+socket.on('location_info', function(data){
 
 	droneLat = data['lat'];
 	droneLng = data['lng'];
@@ -47,6 +48,25 @@ socket.on('location', function(data){
 	droneLatLng = L.latLng(droneLat, droneLng);
 	updatePath();
 });
+
+socket.on('speed_info', function(data){
+	console.log(data['airspeed']);
+	$('#info_speed_air').html(data['airspeed'].toFixed(4));
+	$('#info_speed_ground').html(data['groundspeed']);
+});
+
+socket.on('mode_info', function(data){
+	$('info_mode').html(data);	
+});
+
+socket.on('armed_info', function(data){
+	if(data){
+		$('info_armed').html('armed');
+	}
+	else{
+		$('info_armed').html('disarmed');
+	}
+})
 
 // ---- Handle disconnection ----
 socket.on('disconnected',function() {
