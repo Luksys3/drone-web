@@ -7,6 +7,7 @@ socket.on('connect', function(){
 	connected = true;
 	changeButtons(connected, armed);
 	socket.emit('get_config');
+	socket.emit('get_data');
 });
 
 // ---- Print logs from server ----
@@ -50,23 +51,28 @@ socket.on('location_info', function(data){
 });
 
 socket.on('speed_info', function(data){
-	console.log(data['airspeed']);
-	$('#info_speed_air').html(data['airspeed'].toFixed(4));
-	$('#info_speed_ground').html(data['groundspeed']);
+	$('#info_speed_air').html(data['airspeed'].toFixed(2));
+	$('#info_speed_ground').html(data['groundspeed'].toFixed(2));
 });
 
 socket.on('mode_info', function(data){
-	$('info_mode').html(data);	
+	$('#info_mode').html(data);	
+});
+
+socket.on('velocity_info', function(data){
+	$('#info_speed_x').html(data['x'].toFixed(2));
+	$('#info_speed_y').html(data['y'].toFixed(2));
+	$('#info_speed_z').html(data['z'].toFixed(2));
 });
 
 socket.on('armed_info', function(data){
 	if(data){
-		$('info_armed').html('armed');
+		$('#info_armed').html('ARMED');
 	}
 	else{
-		$('info_armed').html('disarmed');
+		$('#info_armed').html('DISARMED');
 	}
-})
+});
 
 // ---- Handle disconnection ----
 socket.on('disconnected',function() {
