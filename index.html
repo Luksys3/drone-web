@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Regius Avem</title>
+	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.0.3/leaflet.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
@@ -79,11 +80,11 @@
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>VERTICAL SPEED</strong> <span style="float: right;"><span id="info_speed_v">0.00</span> m/s</span>
+						<strong>A/G SPEED</strong> <span style="float: right;"><span id="info_speed_air">0.00</span> / <span id="info_speed_ground">0.00</span> m/s</span></span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>HORIZONTAL SPEED</strong> <span style="float: right;"><span id="info_speed_h">0.00</span> m/s</span>
+						<strong>VELOCITY X/Y/Z</strong> <span style="float: right;"><span id="info_speed_x">0.00</span>/<span id="info_speed_y">0.00</span>/<span id="info_speed_z">0.00</span> m/s</span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
@@ -91,11 +92,11 @@
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>ARMED</strong> <span style="float: right;"><span id="info_armed">NO</span> </span>
+						<strong>STATUS</strong> <span style="float: right;"><span id="info_armed">DISARMED</span> </span>
 					</div>
 
 					<div class="alert alert-dark" role="alert">
-						<strong>BATTERY</strong> <span style="float: right;"><span id="info_battery">0.00</span> V</span>
+						<strong>BATTERY</strong> <span style="float: right;"><span id="info_battery">0.00</span>V <span id="info_battery_per">0</span>%</span>
 					</div>
 				</div>
 

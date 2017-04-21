@@ -201,6 +201,6 @@ function getSettings( settings ){
 }
 
 function updateSettings( settings ){
-	socket.emit('settings', settings);
+	socket.emit('config_post', settings);
 	addLog('Settings has been updated.');
 }
