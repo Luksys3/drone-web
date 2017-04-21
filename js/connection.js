@@ -21,11 +21,6 @@ socket.on('config_response', function(data){
 });
 
 // ---- Update information
-socket.on('gyro_info', function(data){
-	//$('#info_pitch').html(data['pitch']);
-	//$('#info_roll').html(data['roll']);
-	//$('#info_yaw').html(data['yaw']);
-});
 
 socket.on('battery_info', function(data){
 	$('#info_battery').html(data["voltage"]);

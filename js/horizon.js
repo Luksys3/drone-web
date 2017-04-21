@@ -514,10 +514,10 @@ function _draw_h(w, h) {
 
 _render = function(data) {
     setValues({
-        _roll : data.demo.rotation.roll * Math.PI / 180,
-        _pitch : data.demo.rotation.pitch * Math.PI / 180,
-        _altitude : data.demo.altitudeMeters,
-        _speed : data.demo.velocity.z
+        _roll : data['roll'] * Math.PI / 180,
+        _pitch : data['pitch'] * Math.PI / 180,
+        _altitude : data['altitude'],
+        _speed : data['speed']
     });
 
     _draw();
@@ -529,7 +529,7 @@ _render = function(data) {
 $("#hub").append('<canvas id="horizon" width="640" height="360"></canvas>');
 _ctx = $("#horizon").get(0).getContext('2d');
 
-socket.on('data_on', function(data) {
+socket.on('gyro_info', function(data) {
     requestAnimationFrame(function() {
         _render(data);
     });
