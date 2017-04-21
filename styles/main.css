@@ -3,6 +3,7 @@ html, body {
 	color: white;
 	font-weight: 900;
 	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 ul{
@@ -129,13 +130,12 @@ a:hover {
 	background-color: #263238;
 	width: 35px;
 	height: 37px;
-	border-bottom-left-radius: 10px;
 	border-top-left-radius: 10px;
 	font-size: 25px;
 	padding-left: 6px;
 	position: fixed;
     left: calc(100% - 35px);
-    top: 200px;
+    top: calc(100% - 37px);
 	cursor: pointer;
 }
 

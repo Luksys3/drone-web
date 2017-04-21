@@ -7,6 +7,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/css/iziModal.min.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.1.1/css/iziToast.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.0.0/alt/video-js-cdn.min.css" />
+	<link rel="stylesheet" href="styles/hud.css">
 	<link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
@@ -16,8 +18,17 @@
 			<div class="col-md-6" style="padding: 0;">
 				<div id="control_map" style="height: 59vh;"></div>
 			</div>
+
 			<div class="col-md-6" style="padding: 0;">
 
+				<video id="my-video" class="video-js" controls preload="auto" style="width: 100%; height: 100%" width="640" height="264"
+				poster="MY_VIDEO_POSTER.jpg" data-setup="{}">
+					<source src="http://localhost:8081/" type="rtmp/mp4">
+				</video>
+
+				<div id="hub" style="height: 390px;"></div>
+
+				
 			</div>
 		</div>
 
@@ -165,6 +176,7 @@
 		</div>
 	</div>
 
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
@@ -172,10 +184,13 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/izimodal/1.4.2/js/iziModal.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.1.1/js/iziToast.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/6.0.0/video.min.js"></script>
 
 	<script src="js/functions.js"></script>
 	<script src="js/config.js"></script>
 	<script src="js/connection.js"></script>
 	<script src="js/main.js"></script>
+	<script src="js/compass.js"></script>
+	<script src="js/horizon.js"></script>
 </body>
 </html>
