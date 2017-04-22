@@ -191,12 +191,28 @@ function getSettings( settings ){
 	var settingsCon = $('#set #settings');
 	settingsCon.text('');
 	$.each(settings, function(i, set){
-		settingsCon.append(
-			'<div class="input-group" style="padding-top: 5px;">'+
-				'<div class="input-group-addon no-border-radius" style="border-left:0;">'+ set.name +'</div>'+
-				'<input type="text" class="form-control no-border-radius setting" name="'+ set.name +'" value="'+ set.value +'">'+
-			'</div>'
-		);
+		var inputEl = ''+
+			'<div class="input-group setting" setting-name="'+ set.name +'" style="padding-top: 5px;" val-type="'+ set.type +'">'+
+				'<div class="input-group-addon no-border-radius" style="border-left:0;">'+ set.name +'</div>';
+		if( set.type == 'int' ){
+			inputEl += '<input type="number" class="form-control no-border-radius" name="'+ set.name +'" value="'+ set.value +'"></div>';
+		}else if( set.type == 'string' ){
+			inputEl += '<input type="text" class="form-control no-border-radius" name="'+ set.name +'" value="'+ set.value +'"></div>';
+		}else if( set.type == 'bool' ){
+			var checkedTrue = (set.value == true) ? 'checked' : '';
+			var checkedFalse = (set.value == false) ? 'checked' : '';
+			
+			inputEl += ''+
+					'<input type="radio" class="form-control no-border-radius" id="radio-true-'+ set.name +'" name="radio-'+ set.name +'" value="True" '+ checkedTrue +'>'+
+					'<label for="radio-true-'+ set.name +'">True</label>'+
+					'<input type="radio" class="form-control no-border-radius" id="radio-false-'+ set.name +'" name="radio-'+ set.name +'" value="False" '+ checkedFalse +'>'+
+					'<label for="radio-false-'+ set.name +'">False</label>'+
+				'</div>';
+		}else{
+			console.log('Err: undefined setting type - '. set.type);
+		}
+		
+		settingsCon.append( inputEl );
 	});
 }
 

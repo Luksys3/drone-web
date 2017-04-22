@@ -266,10 +266,26 @@ $('#update_settings').on('click', function(e){
 	var settings = [];
 	var settingsInputs = $('#settings .setting');
 	$.each(settingsInputs, function(i, value){
-		settings.push({
-			name: $(value).attr('name'),
-			value: $(value).val()
-		});
+		if( $(value).attr('val-type') == 'int' ){
+			settings.push({
+				name: $(value).attr('setting-name'),
+				value: parseInt($(value).find('input').val()),
+				type: $(value).attr('val-type')
+			});
+		}else if( $(value).attr('val-type') == 'string' ){
+			settings.push({
+				name: $(value).attr('setting-name'),
+				value: $(value).find('input').val(),
+				type: $(value).attr('val-type')
+			});
+		}else if( $(value).attr('val-type') == 'bool' ){
+			settings.push({
+				name: $(value).attr('setting-name'),
+				value: ( $(value).find('input[name^=radio]:checked').val() == 'True' ),
+				type: $(value).attr('val-type')
+			});
+		}
 	});
+	console.log(settings);
 	updateSettings( settings );
 });

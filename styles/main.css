@@ -139,6 +139,17 @@ a:hover {
 	cursor: pointer;
 }
 
+#settings label {
+	color: #fff;
+	cursor: pointer;
+}
+#settings .input-group-addon {
+    width: 50%;
+}
+#settings .input-group[val-type=bool]{
+	text-align: left;
+}
+
 .iziModal-content {
 	color: #263238;
 	font-weight: normal;
