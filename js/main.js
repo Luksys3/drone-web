@@ -266,10 +266,10 @@ $('#update_settings').on('click', function(e){
 	var settings = [];
 	var settingsInputs = $('#settings .setting');
 	$.each(settingsInputs, function(i, value){
-		if( $(value).attr('val-type') == 'int' ){
+		if( $(value).attr('val-type') == 'number' ){
 			settings.push({
 				name: $(value).attr('setting-name'),
-				value: parseInt($(value).find('input').val()),
+				value: Number($(value).find('input').val()),
 				type: $(value).attr('val-type')
 			});
 		}else if( $(value).attr('val-type') == 'string' ){
@@ -286,6 +286,5 @@ $('#update_settings').on('click', function(e){
 			});
 		}
 	});
-	console.log(settings);
 	updateSettings( settings );
 });

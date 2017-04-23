@@ -194,7 +194,7 @@ function getSettings( settings ){
 		var inputEl = ''+
 			'<div class="input-group setting" setting-name="'+ set.name +'" style="padding-top: 5px;" val-type="'+ set.type +'">'+
 				'<div class="input-group-addon no-border-radius" style="border-left:0;">'+ set.name +'</div>';
-		if( set.type == 'int' ){
+		if( set.type == 'number' ){
 			inputEl += '<input type="number" class="form-control no-border-radius" name="'+ set.name +'" value="'+ set.value +'"></div>';
 		}else if( set.type == 'string' ){
 			inputEl += '<input type="text" class="form-control no-border-radius" name="'+ set.name +'" value="'+ set.value +'"></div>';
