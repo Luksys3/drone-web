@@ -408,12 +408,12 @@ function drawAltitude() {
     );
     _ctx.clip();
 
-    yOffset = _altitude / 100 * pixelsPer100Ft;
+    yOffset = _altitude / 20 * pixelsPer100Ft;
 
     // The unclipped ticks to be rendered. We render 500ft either side of
     // the center to be safe
-    from = Math.floor(_altitude / 100)  - 5;
-    to = Math.ceil(_altitude / 100)  + 5;
+    from = Math.floor(_altitude / 20)  - 5;
+    to = Math.ceil(_altitude / 20)  + 5;
 
     for (i = from; i < to; ++i) {
         _ctx.moveTo(0, -i * pixelsPer100Ft + yOffset);
@@ -435,7 +435,7 @@ function drawAltitude() {
 
         _ctx.font = '12px Arial';
         _ctx.fillStyle = 'white';
-        _ctx.fillText(i * 100, 15, -i * pixelsPer100Ft + yOffset + 4);
+        _ctx.fillText(i * 20, 15, -i * pixelsPer100Ft + yOffset + 4);
     }
 
     _ctx.strokeStyle = 'white';
@@ -475,7 +475,7 @@ function drawAltitude() {
     _ctx.strokeStyle = 'black';
     _ctx.fillStyle = 'black';
     _ctx.fillText(
-        Math.round(_altitude * 200) / 100,
+        Math.round(_altitude * 200) / 200,
         15, 4.5, altIndicatorHeight
     );
 
@@ -512,13 +512,11 @@ function _draw_h(w, h) {
 };
 
 
-_render = function(data) {
-    setValues({
-        _roll : data['roll'] * Math.PI / 180,
-        _pitch : data['pitch'] * Math.PI / 180,
-        _altitude : data['altitude'],
-        _speed : data['speed']
-    });
+_render = function(data) {    
+    _roll = data['roll'],
+    _pitch = data['pitch'],
+    _altitude = data['altitude'],
+    _speed = data['speed']
 
     _draw();
 }
