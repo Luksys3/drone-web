@@ -288,3 +288,6 @@ $('#update_settings').on('click', function(e){
 	});
 	updateSettings( settings );
 });
+
+// Stream iframe height
+$('.stream-iframe').height( $('.stream-container').height() );
