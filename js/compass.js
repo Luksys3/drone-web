@@ -28,7 +28,7 @@ function moveTo(angle) {
     });
 };
 
-socket.on('compass', function(angle) {
+socket.on('compass_info', function(angle) {
     requestAnimationFrame(function() {
         moveTo(angle);
     });
