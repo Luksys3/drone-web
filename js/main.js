@@ -59,7 +59,14 @@ controlMap.on('click', function(e){
 		var roi = $("#roi_switch").is(":checked");
 		if(roi == true){
 			point.name = 'roi';
-			//Add a different marker
+
+			L.circle(point, {
+				color: 'green',
+				fillColor: 'green',
+				fillOpacity: 1,
+				radius: 2
+			}).addTo(controlMap).bringToBack();
+
 			addLog('ROI mission added');
 		} else{
 			point.name = 'fly_to';
