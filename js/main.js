@@ -206,47 +206,37 @@ $(document).on("click", "#force_loiter", function(event){
 $(document).on("click", "#connect", function(event){
 	if(connected){
 		socket.emit('vehicle_disconnect');
-		socket.disconnect();
 		iziToast.show({
-			title: 'Disconecting from the server!',
+			title: 'Disconecting from Vehicle!',
 			color: 'red'
 		});
-		addLog('Disconnecting from the server;');
-		connected = false;
+		addLog('Disconnecting from Vehicle;');
 	} else {
-		socket = io.connect(server_ip);
 		socket.emit('vehicle_connect');
 		iziToast.show({
-			title: 'Connecting to the server!',
+			title: 'Connecting to Vehicle!',
 			color: 'yellow'
 		});
-		addLog('Connecting to the server;');
-		connected = true;
+		addLog('Connecting to Vehicle;');
 	}
-	changeButtons(connected, armed);
 });
 
 $(document).on("click", "#arm", function(event){
 	if(armed){
 		socket.emit('disarm');
-		socket.disconnect();
 		iziToast.show({
 			title: 'Disarming the vehicle!',
 			color: 'red'
 		});
 		addLog('Disarming;');
-		armed = false;
 	} else {
-		socket = io.connect(serverIP);
 		socket.emit('arm');
 		iziToast.show({
 			title: 'Arming the vehicle!',
 			color: 'yellow'
 		});
 		addLog('Arming;');
-		armed = true;
 	}
-	changeButtons(connected, armed);
 });
 
 // ----- END -----

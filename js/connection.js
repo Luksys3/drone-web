@@ -4,8 +4,6 @@ var socket;
 socket = io.connect(server_ip);
 socket.on('connect', function(){
 	addLog('Client has connected to the server!');
-	connected = true;
-	changeButtons(connected, armed);
 	socket.emit('get_config');
 	socket.emit('get_data');
 });
@@ -28,7 +26,6 @@ socket.on('battery_info', function(data){
 });
 
 socket.on('location_info', function(data){
-
 	droneLat = data['lat'];
 	droneLng = data['lng'];
 
@@ -67,11 +64,20 @@ socket.on('armed_info', function(data){
 	else{
 		$('#info_armed').html('DISARMED');
 	}
+	armed = data
+	changeButtons(connected, armed);
 });
 
 // ---- Handle disconnection ----
-socket.on('disconnected',function() {
-	addLog('Disconnected from server!');
-	connected = false;
-	changeButtons(connected, armed);
+socket.on('vehicle_success',function(data) {
+	if(data)
+		socket.emit('get_data');
+	connected = data
+	if(data){
+		$("#arm").removeAttr('disabled');
+	}
+	else{
+		$("#arm").attr("disabled", true);
+	}
+	changeButtons(data, armed);
 });
