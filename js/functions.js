@@ -194,7 +194,7 @@ function getSettings( settings ){
 	settingsCon.text('');
 	$.each(settings, function(i, set){
 		var inputEl = ''+
-			'<div class="input-group setting" setting-name="'+ set.name +'" style="padding-top: 5px;" val-type="'+ set.type +'">'+
+			'<div class="input-group setting" setting-name="'+ set.name +'" style="margin-top: 5px;" val-type="'+ set.type +'">'+
 				'<div class="input-group-addon no-border-radius" style="border-left:0;">'+ set.name +'</div>';
 		if( set.type == 'number' ){
 			inputEl += '<input type="number" class="form-control no-border-radius" name="'+ set.name +'" value="'+ set.value +'"></div>';
@@ -205,11 +205,9 @@ function getSettings( settings ){
 			var checkedFalse = (set.value == false) ? 'checked' : '';
 			
 			inputEl += ''+
-					'<input type="radio" class="form-control no-border-radius" id="radio-true-'+ set.name +'" name="radio-'+ set.name +'" value="True" '+ checkedTrue +'>'+
-					'<label for="radio-true-'+ set.name +'">True</label>'+
-					'<input type="radio" class="form-control no-border-radius" id="radio-false-'+ set.name +'" name="radio-'+ set.name +'" value="False" '+ checkedFalse +'>'+
-					'<label for="radio-false-'+ set.name +'">False</label>'+
-				'</div>';
+				'<label class="switch">'+
+					'<input type="checkbox" name="radio-'+ set.name +'"><div class="slider round"></div>'+
+				'</label>';
 		}else{
 			console.log('Err: undefined setting type - '. set.type);
 		}

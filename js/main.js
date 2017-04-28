@@ -284,12 +284,24 @@ $('#update_settings').on('click', function(e){
 		}else if( $(value).attr('val-type') == 'bool' ){
 			settings.push({
 				name: $(value).attr('setting-name'),
-				value: ( $(value).find('input[name^=radio]:checked').val() == 'True' ),
+				value: $(value).find('input[name^=radio]').is(':checked'),
 				type: $(value).attr('val-type')
 			});
 		}
 	});
 	updateSettings( settings );
+	iziToast.show({
+    	title: 'Settings has been updated!',
+		color: 'green'
+	});
+});
+
+$('#reset_settings').on('click', function(e){
+	socket.emit('reset_config');
+	iziToast.show({
+    	title: 'Settings has been reset!',
+		color: 'green'
+	});
 });
 
 // Stream iframe height

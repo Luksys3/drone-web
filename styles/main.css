@@ -23,14 +23,14 @@ ul{
 	width: 100%;
 	max-width: 800px;
 	height: 200px;
-    position: relative;
+	position: relative;
 	overflow: auto;
 }
 #logs_tab .logs_data{
 	margin: 0;
 	padding: 0;
-    position: relative;
-    bottom: 3px;
+	position: relative;
+	bottom: 3px;
 }
 
 .moving_arrows .arrow{
@@ -40,7 +40,7 @@ ul{
 
 .vjs-big-play-button {
 	margin-top: 170px;
-    margin-left: 40%;
+	margin-left: 40%;
 }
 
 .green {
@@ -134,8 +134,8 @@ a:hover {
 	font-size: 25px;
 	padding-left: 6px;
 	position: fixed;
-    left: calc(100% - 35px);
-    top: calc(100% - 37px);
+	left: calc(100% - 35px);
+	top: calc(100% - 37px);
 	cursor: pointer;
 }
 
@@ -144,10 +144,22 @@ a:hover {
 	cursor: pointer;
 }
 #settings .input-group-addon {
-    width: 50%;
+	width: 50%;
 }
 #settings .input-group[val-type=bool]{
 	text-align: left;
+}
+.setting{
+	background-color: #263238;
+	border: 1px solid rgba(0,0,0,.15);
+}
+.setting .switch{
+	left: inherit;
+	bottom: inherit;
+	margin: 5px auto 0 auto;
+}
+.setting .input-group-addon {
+	border: none;
 }
 
 .iziModal-content {
