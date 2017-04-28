@@ -71,6 +71,8 @@ function updatePath(){
 				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +'. Change altitude to ' + point.alt + '</li>');
 			} else if( point.name == 'land' ){
 				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +'. Lands on the current possition</li>');
+			} else if(point.name == "roi"){
+				var x = pathPointsContainter.find('ul').append('<li id='+ index +'>' + moving_arrows_html + (index + 1) +'. ROI ('+ point.lat.toString().substring(0, 10) +', '+ point.lng.toString().substring(0, 10) +', '+ point.alt +')</li>');
 			}
 
 			pathPointsContainter.find('ul #'+ index).unbind('mouseover');

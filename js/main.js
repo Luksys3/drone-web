@@ -42,7 +42,7 @@ var popup = L.popup();
 controlMap.on('click', function(e){
 	popup
         .setLatLng(e.latlng)
-        .setContent("<form id='alt-map'><input type='number' id='alt' class='form-control' style='border: 1px dashed black !important; width: 200px' placeholder='Choose altitude' /></form>")
+        .setContent("<form id='alt-map'> <font class='roi'>ROI:</font> <label class='switch'> <input id='roi_switch' type='checkbox'> <div class='slider round'></div> </label><input type='number' id='alt' class='form-control' style='border: 1px dashed black !important; width: 200px' placeholder='Choose altitude' /></form>")
         .openOn(controlMap);
 
 	$('#alt').focus();
@@ -56,13 +56,19 @@ controlMap.on('click', function(e){
 			point.alt = 5;
 		else
 			point.alt = alt;
-		point.name = 'fly_to';
-		addPointToPath(point);
+		var roi = $("#roi_switch").is(":checked");
+		if(roi == true){
+			point.name = 'roi';
+			//Add a different marker
+			addLog('ROI mission added');
+		} else{
+			point.name = 'fly_to';
+			addPointToPath(point);
+			addLog('Fly to location mission added;');
+		}
+		console.log(roi);
 		controlMap.closePopup();
 	});
-
-	addLog('Fly to location mission added;');
-
 });
 
 var path = L.polyline([]).addTo(controlMap);
