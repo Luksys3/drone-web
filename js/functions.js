@@ -201,12 +201,11 @@ function getSettings( settings ){
 		}else if( set.type == 'string' ){
 			inputEl += '<input type="text" class="form-control no-border-radius" name="'+ set.name +'" value="'+ set.value +'"></div>';
 		}else if( set.type == 'bool' ){
-			var checkedTrue = (set.value == true) ? 'checked' : '';
-			var checkedFalse = (set.value == false) ? 'checked' : '';
+			var checked = (set.value == true) ? 'checked' : '';
 			
 			inputEl += ''+
 				'<label class="switch">'+
-					'<input type="checkbox" name="radio-'+ set.name +'"><div class="slider round"></div>'+
+					'<input type="checkbox" name="radio-'+ set.name +'" '+ checked +'><div class="slider round"></div>'+
 				'</label>';
 		}else{
 			console.log('Err: undefined setting type - '. set.type);
