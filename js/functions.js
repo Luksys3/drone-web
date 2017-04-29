@@ -10,6 +10,22 @@ function addPointToPath(point){
 	updatePath();
 }
 
+function addRoiToPath(point){
+	L.circle(point, {
+		color: 'green',
+		fillColor: 'green',
+		fillOpacity: 1,
+		radius: 2
+	}).addTo(controlMap).bringToBack();
+	
+	window.missions.push({
+		name: point.name,
+		lat: point.lat,
+		lng: point.lng,
+		alt: Number(point.alt),
+	});
+}
+
 function removePathPoint(point, pointCircle){
 	controlMap.removeLayer(pointCircle);
 	pathPoints = jQuery.grep(pathPoints, function(value) {
