@@ -16,7 +16,7 @@ def send(ip_collection):
 
 def is_connected():
     try:
-        state = ip.interfaces.wlp2s0.ipaddr[0]["address"]
+        state = ip.interfaces.wlan0.ipaddr[0]["address"]
         print "Private ip is", state
         return [True, state]
     except:
