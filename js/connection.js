@@ -20,7 +20,7 @@ socket.on('config_response', function(data){
 
 // ---- Update information
 
-socket.on('location_info', function(data){
+socket.on('all_info', function(data){
 	droneLat = data['lat'];
 	droneLng = data['lng'];
 

@@ -515,8 +515,8 @@ function _draw_h(w, h) {
 _render = function(data) {
     _roll = data['roll'],
     _pitch = data['pitch'],
-    _altitude = data['altitude'],
-    _speed = data['speed']
+    _altitude = data['alt'],
+    _speed = data['airspeed']
 
     _draw();
 }
