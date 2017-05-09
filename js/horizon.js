@@ -512,7 +512,7 @@ function _draw_h(w, h) {
 };
 
 
-_render = function(data) {    
+_render = function(data) {
     _roll = data['roll'],
     _pitch = data['pitch'],
     _altitude = data['altitude'],
@@ -526,12 +526,6 @@ _render = function(data) {
 // Add required UI elements
 $("#hub").append('<canvas id="horizon" width="640" height="360"></canvas>');
 _ctx = $("#horizon").get(0).getContext('2d');
-
-socket.on('gyro_info', function(data) {
-    requestAnimationFrame(function() {
-        _render(data);
-    });
-});
 
 // Bind on window events to resize
 $(window).resize(function(event) {

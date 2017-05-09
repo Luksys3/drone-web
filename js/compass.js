@@ -28,12 +28,6 @@ function moveTo(angle) {
     });
 };
 
-socket.on('compass_info', function(angle) {
-    requestAnimationFrame(function() {
-        moveTo(angle);
-    });
-});
-
 div.style.overflow = 'hidden';
 
 ctx = canvas.getContext('2d');

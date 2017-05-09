@@ -20,11 +20,6 @@ socket.on('config_response', function(data){
 
 // ---- Update information
 
-socket.on('battery_info', function(data){
-	$('#info_battery').html(data["voltage"]);
-	$('#info_battery_per').html(data["level"]);
-});
-
 socket.on('location_info', function(data){
 	droneLat = data['lat'];
 	droneLng = data['lng'];
@@ -40,32 +35,29 @@ socket.on('location_info', function(data){
 	} catch(e) { }
 	droneLatLng = L.latLng(droneLat, droneLng);
 	updatePath();
-});
-
-socket.on('speed_info', function(data){
+	$('#info_battery').html(data["voltage"]);
+	$('#info_battery_per').html(data["level"]);
 	$('#info_speed_air').html(data['airspeed'].toFixed(2));
 	$('#info_speed_ground').html(data['groundspeed'].toFixed(2));
-});
-
-socket.on('mode_info', function(data){
-	$('#info_mode').html(data);	
-});
-
-socket.on('velocity_info', function(data){
+	$('#info_mode').html(data["mode"]);
 	$('#info_speed_x').html(data['x'].toFixed(2));
 	$('#info_speed_y').html(data['y'].toFixed(2));
 	$('#info_speed_z').html(data['z'].toFixed(2));
-});
-
-socket.on('armed_info', function(data){
-	if(data){
+	if(data["armed"]){
 		$('#info_armed').html('ARMED');
 	}
 	else{
 		$('#info_armed').html('DISARMED');
 	}
-	armed = data
+	armed = data["armed"]
 	changeButtons(connected, armed);
+
+	requestAnimationFrame(function() {
+			moveTo(data["compass"]);
+	});
+	requestAnimationFrame(function() {
+			_render(data);
+	});
 });
 
 // ---- Handle disconnection ----
